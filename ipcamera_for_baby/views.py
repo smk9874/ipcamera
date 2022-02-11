@@ -1,8 +1,12 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.http.response import StreamingHttpResponse
+from django.db.models import Q
 import requests
 import time
+
+from .models import UserList
+
 
 
 # Create your views here.
@@ -78,3 +82,21 @@ def get_frame_from_motioneye():
 
     return response
 #    return bytes(response.text, 'utf-8')
+
+def recv_mac_addr(request, mac_addr):
+
+    print('recv_mac_addr', mac_addr)
+
+    user_list = UserList.objects.all()
+
+    #1. find mac_addr from userlist
+    filter_result = UserList.objects.filter(Q(mac_address=mac_addr)).count()
+
+    if filter_result == 0:
+        print('create user')
+        user = UserList(mac_address=mac_addr, name='')
+        user.save()
+    else:
+        print('This mac address is already registered')
+        
+    return HttpResponse('HttpResponse!!')
