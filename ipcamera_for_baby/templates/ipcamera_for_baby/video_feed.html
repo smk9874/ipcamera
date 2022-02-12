@@ -27,14 +27,22 @@
 			<th align="right">motion</th>
 			<th align="left">
                 <label class="switch">
-                    <input type="checkbox">
-                    <span class="slider round"></span>
+                    {% if motion_alarm %}
+                        <input type="checkbox" checked>
+                    {% else %}
+                        <input type="checkbox">
+                    {% endif %} 
+                    <span class="slider round"></span> 
                 </label>
             </th>
 			<th align="right">sound</th>
 			<th align="left">
                 <label class="switch">
-                    <input type="checkbox">
+                    {% if sound_alarm %}
+                        <input type="checkbox" checked>
+                    {% else %}
+                        <input type="checkbox">
+                    {% endif %}
                     <span class="slider round"></span>
                 </label>
             </th>

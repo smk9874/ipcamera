@@ -5,6 +5,7 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name='index'),
+    path('show/<str:mac_addr>/', views.index_mac, name='index_mac'),
     path('video_feed/', views.video_feed, name='video_feed'),
     path('recv_mac_addr/<str:mac_addr>/', views.recv_mac_addr, name='recv_mac_addr'),
 ]

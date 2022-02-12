@@ -5,24 +5,41 @@ from django.db.models import Q
 import requests
 import time
 
-from .models import UserList
+from .models import User, AlarmSetting
 
 
-
-# Create your views here.
 def index(request):
-
-#    print('called index')
-#    return render(request, 'ipcamera_for_baby/video_feed.html')
 
     return render(request, 'ipcamera_for_baby/video_feed.html')
 
-    frame = get_frame_from_motioneye()
+def index_mac(request, mac_addr):
 
-    value = HttpResponse(frame, content_type="image/jpeg")
-#    print('****', value)
-    return value
-#    return HttpResponse(frame, content_type="image/jpeg")
+    #1. find mac_addr from userlist
+    user = User.objects.filter(Q(mac_address=mac_addr))
+    print(user)
+    count = user.count()
+
+    if count == 0:
+        print('create user')
+        new_user = User(mac_address=mac_addr)
+        new_user.save()
+
+        alarm_setting = AlarmSetting(user=new_user)
+        alarm_setting.save()
+
+    else:
+        print('This mac address is registered already', user)
+
+    #2. show user's alarm settings to web page
+    user = User.objects.get(mac_address=mac_addr)
+    alarm = AlarmSetting.objects.get(user=user.id)
+
+    context = {
+                'motion_alarm': alarm.motion_alarm,
+                'sound_alarm': alarm.sound_alarm,
+               }
+
+    return render(request, 'ipcamera_for_baby/video_feed.html', context)
 
 def gen():
 
@@ -71,8 +88,6 @@ def video_feed(request):
 
 def get_frame_from_motioneye():
 
-    print('called get_streaming_from_motioneye')
-
     url = 'http://localhost:8765/picture/1/current'
     response = requests.get(url)
 #    status = response.status_code
@@ -87,16 +102,14 @@ def recv_mac_addr(request, mac_addr):
 
     print('recv_mac_addr', mac_addr)
 
-    user_list = UserList.objects.all()
-
     #1. find mac_addr from userlist
-    filter_result = UserList.objects.filter(Q(mac_address=mac_addr)).count()
+    filter_result = User.objects.filter(Q(mac_address=mac_addr)).count()
 
     if filter_result == 0:
         print('create user')
-        user = UserList(mac_address=mac_addr, name='')
+        user = User(mac_address=mac_addr, name='')
         user.save()
     else:
-        print('This mac address is already registered')
+        print('This mac address is registered already')
         
     return HttpResponse('HttpResponse!!')
