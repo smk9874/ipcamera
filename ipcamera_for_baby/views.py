@@ -16,30 +16,84 @@ def index_mac(request, mac_addr):
 
     #1. find mac_addr from userlist
     user = User.objects.filter(Q(mac_address=mac_addr))
-    print(user)
-    count = user.count()
 
-    if count == 0:
-        print('create user')
-        new_user = User(mac_address=mac_addr)
-        new_user.save()
+    if request.method == 'GET':
 
-        alarm_setting = AlarmSetting(user=new_user)
-        alarm_setting.save()
+        count = user.count()
+        if count == 0:
+            print('create user')
+            new_user = User(mac_address=mac_addr)
+            new_user.save()
 
-    else:
-        print('This mac address is registered already', user)
+            alarm_setting = AlarmSetting(user=new_user)
+            alarm_setting.save()
+
+        else:
+            print('This mac address is registered already', user)
+
+    elif request.method == 'POST':
+
+        user = User.objects.get(mac_address=mac_addr)
+ 
+        #2. get and save checkbox value to db
+        alarm = AlarmSetting.objects.get(user=user.id)
+        check_status = request.POST.getlist('alarms')
+        print('check_status=', check_status)
+        if 'motion' in check_status:
+            alarm.motion_alarm = True
+        else:
+            alarm.motion_alarm = False
+        if 'sound' in check_status:
+            alarm.sound_alarm = True
+        else:
+            alarm.sound_alarm = False
+        alarm.save()       
 
     #2. show user's alarm settings to web page
     user = User.objects.get(mac_address=mac_addr)
     alarm = AlarmSetting.objects.get(user=user.id)
 
     context = {
+                'user_id': user.id,
                 'motion_alarm': alarm.motion_alarm,
                 'sound_alarm': alarm.sound_alarm,
                }
 
     return render(request, 'ipcamera_for_baby/video_feed.html', context)
+
+def set_alarm(request, mac_addr, user_id):
+
+    print('called set_alarm')
+
+    #1. find user id from db
+    if User.objects.all():
+        user = User.objects.get(id=user_id) 
+        print(user)
+
+        #2. get and save checkbox value to db
+        alarm = AlarmSetting.objects.get(user=user.id)
+        check_status = request.POST.getlist('alarms')
+        print('check_status=', check_status)
+        if 'motion' in check_status:
+            alarm.motion_alarm = True
+        else:
+            alarm.motion_alarm = False
+        if 'sound' in check_status:
+            alarm.sound_alarm = True
+        else:
+            alarm.sound_alarm = False
+        alarm.save()
+    else:
+        print('cannot find user id ', user_id)
+
+    context = {
+                'user_id': user.id,
+                'motion_alarm': alarm.motion_alarm,
+                'sound_alarm': alarm.sound_alarm,
+               }
+
+    return index_mac(request, mac_addr)
+#    return render(request, 'ipcamera_for_baby/video_feed.html', context)
 
 def gen():
 
