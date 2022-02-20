@@ -23,44 +23,43 @@
 			<th align="left">alarm settings</th>
 			<th> </th>
 			<th> </th>
-			<th align=right>
-<!--                <input type="button" class="button2" id="save" value="save"> -->
+			<th>
             </th>
 		</tr>
-		<tr>
-			<th align="right">motion</th>
-			<th align="left">
-                <label class="switch">
-                    {% if motion_alarm %}
-                        <input type="checkbox" name="alarms" value="motion" checked>
-                    {% else %}
-                        <input type="checkbox" name="alarms" value="motion">
-                    {% endif %} 
-                    <span class="slider round"></span> 
-                </label>
-            </th>
-			<th align="right">sound</th>
-			<th align="left">
-                <label class="switch">
-                    {% if sound_alarm %}
-                        <input type="checkbox" name="alarms" value="sound" checked>
-                    {% else %}
-                        <input type="checkbox" name="alarms" value="sound">
-                    {% endif %}
-                    <span class="slider round"></span>
-                </label>
-            </th>
-		</tr>
-        <tr>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th>
-            <form action="" method="post">
-                <button name="test" type="submit">button test</button>
-            </form>
-        </th>
-        </tr>
+        <form action="" method="post">
+    		<tr>
+                <th align="right">motion</th>
+                <th align="left">
+                    <label class="switch">
+                        {% if motion_alarm %}
+                            <input type="checkbox" name="alarms" value="motion" checked>
+                        {% else %}
+                            <input type="checkbox" name="alarms" value="motion">
+                        {% endif %} 
+                        <span class="slider round"></span> 
+                    </label>
+                </th>
+                <th align="right">sound</th>
+                <th align="left">
+                    <label class="switch">
+                        {% if sound_alarm %}
+                            <input type="checkbox" name="alarms" value="sound" checked>
+                        {% else %}
+                            <input type="checkbox" name="alarms" value="sound">
+                        {% endif %}
+                        <span class="slider round"></span>
+                    </label>
+                </th>
+            </tr>
+            <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th>
+                        <button name="savebtn" class="button1" type="submit">save</button>
+                </th>
+            </tr>
+        </form>
 	</table>
 </body>
 </html>
