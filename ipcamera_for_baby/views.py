@@ -64,9 +64,14 @@ def index_mac(request, mac_addr):
 def set_alarm(request, mac_addr, user_id):
 
     print('called set_alarm')
+    check_status = request.POST.getlist('alarms')
+    print('check_status=', check_status)
 
     #1. find user id from db
-    if User.objects.all():
+    users = User.objects.all()
+    print(users)
+#    if User.objects.all():
+    if users:
         user = User.objects.get(id=user_id) 
         print(user)
 
@@ -167,3 +172,24 @@ def recv_mac_addr(request, mac_addr):
         print('This mac address is registered already')
         
     return HttpResponse('HttpResponse!!')
+
+def motion_alarm_to_server(response):
+
+    print('received web hook from motion eye')
+
+    filter_result = User.objects.all().count()
+    print(filter_result)
+    print('-' * 50)
+
+    for i in range(filter_result):
+        user = User.objects.get(motion_alarm=True)
+        print(user)
+        # send web hook to user
+
+    return HttpResponse('')
+
+def sound_alarm_to_server(response):
+
+    print('received web hook from sound')
+
+    return HttpResponse('')

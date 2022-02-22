@@ -1,6 +1,5 @@
-
 .myframe {
-    width: 50%;
+    width: 100%;
 }
 
 .switch {
@@ -72,7 +71,7 @@ input:checked + .slider:before {
   padding: 0.5rem 1rem;
 
   font-family: "Noto Sans KR", sans-serif;
-  font-size: 2rem;
+  font-size: 1rem;
   font-weight: bold;
   text-align: center;
   text-decoration: none;
@@ -105,12 +104,11 @@ input:checked + .slider:before {
   border-radius: 5px;
 }
 
-.cameraframe {
-    width:50%;
-    height:50%;
+.setting-title {
+    font-size: 2rem;
 }
 
 table {
-  width: 100%;
-  font-size: 2rem;
+  width: 50%;
+  font-size: 1rem;
 }
